@@ -1,0 +1,31 @@
+inherit python-wheel
+
+NAME=python-flit
+VERSION=3.9.0
+RELEASE=1
+CATEGORY=Python
+SUMMARY='Simplified packaging of Python modules'
+DESCRIPTION='Flit is a simple way to put Python packages and modules on PyPI.
+It tries to require less thought about packaging and help you avoid common
+mistakes.'
+HOMEPAGE=https://flit.pypa.io
+LICENSE=BSD-3-Clause
+
+SRC_URI="https://github.com/pypa/flit/archive/refs/tags/${PV}.tar.gz"
+
+ARCH=noarch
+
+build_build_requires () {
+	local -a target_python_versions dotless_target_python_versions build_reqs
+
+	target_python_versions=(${PYTHON_WHEEL_VERSIONS//:/ })
+	dotless_target_python_versions=("${target_python_versions[@]/.}")
+	build_reqs=()
+	for v in "${dotless_target_python_versions[@]}"; do
+		build_reqs+=("${@/#/"python${v}-"}")
+	done
+
+	BUILD_REQUIRES="${build_reqs[*]}"
+}
+
+build_build_requires requests testpath responses docutils tomli tomli-w pytest pytest-cov
