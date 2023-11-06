@@ -1,3 +1,4 @@
+inherit python3
 inherit python-wheel
 
 NAME=python-flit
