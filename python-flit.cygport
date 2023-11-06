@@ -41,7 +41,7 @@ src_install () {
 	cd "$B"
 	python_wheel_install
 
-	cd "$D"
+	cd "$D"/usr/bin
 	sed -ri '1{/^#!/{s/\.exe//;s/python3\.[0-9]+/python3/}}' flit
 	for v in ${PYTHON_WHEEL_VERSIONS//:/ }; do
 		sed -r '1{/^#!/{s/python3/python'"$v"'/}}' flit >"flit$v"
