@@ -13,6 +13,30 @@ LICENSE=BSD-3-Clause
 
 ARCH=noarch
 
+extend_var () {
+	local -n var
+	var="$1"
+	shift
+	var="${var:+$var }$*"
+}
+
+handle_version () {
+	local version pkgversion contents_var
+
+	version="$1"
+	pkgversion="${version/.}"
+
+	contents_var="python${pkgversion}_flit_CONTENTS"
+	extend_var "$contents_var" "usr/bin/flit$version"
+	if [[ "$version" = "$PYTHON3_VERSION" ]]; then
+		extend_var "$contents_var" usr/bin/flit
+	fi
+}
+
+for v in ${PYTHON_WHEEL_VERSIONS//:/ }; do
+	handle_version "$v"
+done
+
 src_install () {
 	cd "$B"
 	python_wheel_install
